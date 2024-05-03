@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uz.pdp</groupId>
-    <artifactId>Project_hr_management</artifactId>
+    <artifactId>Project_hr_management_Role_Permission</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>REST_API_JWT</name>
     <description>REST_API_JWT</description>
