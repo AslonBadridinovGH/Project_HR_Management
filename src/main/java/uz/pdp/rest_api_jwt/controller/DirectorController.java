@@ -30,10 +30,10 @@ public class DirectorController {
      }
 
 
-     // EMAILDA TASDIQLASH LINK BOSILGADA SHU METHOD ISHLAYDI VA LINK ICHIDAN email va emailCode ni ajratib oladi.
+     // if click  Confirm LINK in EMAIL, act this METHOD  and take out email and emailCode   from LINK .
      @GetMapping("/verifyEmail/director")
      public HttpEntity<?>employeeVerifyEmail(@RequestParam String emailCode, @RequestParam String email){
-         ApiResponse apiResponse=directorService.directorVerifyEmail(emailCode,email);
+         ApiResponse apiResponse = directorService.directorVerifyEmail(emailCode,email);
          return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
      }
 

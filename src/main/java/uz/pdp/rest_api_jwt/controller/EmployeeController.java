@@ -40,7 +40,7 @@ public class EmployeeController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 401).body(apiResponse);
     }
 
-    // EMAILDA TASDIQLASH LINK BOSILGADA SHU METHOD ISHLAYDI VA LINK ICHIDAN email va emailCode ni ajratib oladi.
+    // if click  Confirm LINK in EMAIL, act this METHOD  and take out email and emailCode   from LINK .
     @PostMapping(value = "/verifyEmail/employee")
     public HttpEntity<?> employeeVerifyEmail(@RequestParam String emailCode, @RequestParam String email, @RequestParam String password) {
         ApiResponse apiResponse = employeeService.employeeVerifyEmail(emailCode, email, password);
@@ -56,14 +56,13 @@ public class EmployeeController {
     }
 
 
-    // Xodimning berilgan vaqt böyicha ishga kelib ketishi ;       ISHLADI
+    // Xodimning berilgan vaqt böyicha ishga kelib ketishi ;  ISHLADI
     @PreAuthorize(value = "hasAnyRole('DIRECTOR','HRMANAGER')")
     @GetMapping("/{id}/{date1}/{date2}")
     public HttpEntity<?> getEmployeeById(@PathVariable UUID id, @PathVariable String date1, @PathVariable String date2) { // Yoki yana 2 ta localdate
         ApiResponse apiResponse = employeeService.getEmployeeByIdTimeStatus(id, date1, date2);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
-
 
 
     //  Xodimning berilgan vaqt böyicha bajargan task/i             ISHLADI
@@ -75,7 +74,6 @@ public class EmployeeController {
     }
 
 }
-
 
 
 
