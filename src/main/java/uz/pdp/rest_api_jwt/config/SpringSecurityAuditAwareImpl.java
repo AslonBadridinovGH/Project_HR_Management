@@ -11,7 +11,6 @@ import java.util.UUID;
 // QAYTARAMIZ, VA U Product dagi createdBy va updatedBy Field /iga BERADI. CHUNKI ULARNING TIPI UUID. Product Entitydagi
 // createdBy ustuniga Userning UUID nomeri chiqadi.
 
-
 public class SpringSecurityAuditAwareImpl implements AuditorAware<UUID> {
 
     @Override

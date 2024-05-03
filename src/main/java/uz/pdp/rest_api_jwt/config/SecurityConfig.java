@@ -18,26 +18,22 @@ import uz.pdp.rest_api_jwt.service.AuthService;
 import java.util.Properties;
 
 
-  // PASSWORD NI DB ga ochiq saqlash mumkin emas.Shu sababli PasswordEncoder ni chaqirib ishlatamiz
-  // @Configuration bölgan Class ichida Bean Method yaratish mumkin.Va shu Method ni boshqa Classdan, Autoweired qilish mumkin
+  // PASSWORD NI DB ga ochiq saqlash mumkin emas. Shu sababli PasswordEncoder ni chaqirib ishlatamiz
+  // @Configuration bölgan Class ichida Bean Method yaratish mumkin. Va shu Method ni boshqa Classdan, Autoweired qilish mumkin
   @Configuration
   @EnableWebSecurity
   public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   JwtFilter jwtFilter;
-
   @Autowired
   AuthService authService;
-
-
 
     // authService(User qaytaradi) va password ni berib AuthenticationManager NI YASAB OLAMIZ
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(authService).passwordEncoder(passwordEncoder());
     }
-
 
     // TEPADA YASALGAN <<AuthenticationManager>>.  BU METHOD USERNAME VA PASSWORDNI TEKSHIRIB BERADI:
     @Bean
@@ -46,11 +42,9 @@ import java.util.Properties;
     return super.authenticationManagerBean();
    }
 
-
     // Authservice Class ining, registerUser METHOD IDA BERILGAN PASSWORDNI ÖZIDA SAQLAYDI.
     @Bean
     PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder(); }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -60,17 +54,13 @@ import java.util.Properties;
             .authorizeRequests()
             .antMatchers(     //"/api/**"
     "/api/auth/register/director","/api/auth/login/**","/api/auth/verifyEmail/**"
-
             ).permitAll()
             .anyRequest().authenticated(); // QOLGAN YÖLLAR QULFLANSIN,Ammo Token b-n kirsa böladi.
     // UsernamePasswordAuthenticationFilter ning Classidan oldin jwtFilter ni ishlat
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
     // Userni SESSIONDA USHLAMASDAN ISHLA
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
-
-
     // EMAILDAN XABAR JÖNATISH METHODI.
     @Bean
     public JavaMailSender javaMailSender() {
@@ -80,14 +70,12 @@ import java.util.Properties;
       mailSender.setPort(587);
       mailSender.setUsername("aslon.dinov@gmail.com");
       mailSender.setPassword("keuptauhdbxfdsov");
-
     Properties properties = mailSender.getJavaMailProperties();
       properties.put("mail.transport.protocol","smtp");
       properties.put("mail.smtp.auth","true");
       properties.put("mail.smtp.starttls.enable","true");
       properties.put("mail.debug","true");
-      return mailSender;
-    };
+      return mailSender;  };
 
 
    // TIZIMGA KIM KIRGANINI BILISH

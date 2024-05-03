@@ -8,14 +8,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.UUID;
 
-@Configuration       // Class ichida Bean qilish uchun kerak
-@EnableJpaAuditing   //Jpa Auditini yoqish
-
+@Configuration
+@EnableJpaAuditing
 public class AuditingConfig {
 
       @Bean
       AuditorAware<UUID>auditorAware(){
-         return new SpringSecurityAuditAwareImpl();  // BU METHOD AuditorAware TIPINI QAYTARA OLADI
+         return new SpringSecurityAuditAwareImpl();
       }
 
 }
