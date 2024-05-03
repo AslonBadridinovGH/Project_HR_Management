@@ -136,12 +136,10 @@ public class EmployeeTaskService {
             mailMessage.setText("you have new task");
             javaMailSender.send(mailMessage);
             return true;
-
         }catch (Exception e){
             return false;
         }
     }
-
     public Boolean sendEMail1(String sendingEmail){
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -156,6 +154,5 @@ public class EmployeeTaskService {
             return false;
         }
     }
-
 }
 

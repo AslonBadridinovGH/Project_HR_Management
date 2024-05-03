@@ -153,7 +153,6 @@ public class ManagerTaskService {
             return false;
         }
     }
-
     public Boolean sendEMail1(String sendingEmail){
         try {
              SimpleMailMessage mailMessage = new SimpleMailMessage();
