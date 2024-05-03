@@ -51,10 +51,10 @@ public class HRManagerService {
 
     public ApiResponse registerHRManager(RegisterDto registerDto) {
 
-       // BUNAQA EMAIL BASADA BÖLMASLIGI KERAK
+
         boolean existsByEmail = employeeRepository.existsByEmail(registerDto.getEmail());
         if (existsByEmail) {
-            return new ApiResponse("Bunday Email Allqachon mavjud", false);
+            return new ApiResponse("This email already exists", false);
         }
 
          Employee hrManager = new Employee();
@@ -66,11 +66,11 @@ public class HRManagerService {
         hrManager.setEmailCode(UUID.randomUUID().toString());
         employeeRepository.save(hrManager);
         try {
-            // EMAILGA YUBORISH METHODINI CHAQIRYAPMIZ
+
             sendEMail(hrManager.getEmail(), hrManager.getEmailCode());
-            return new ApiResponse("Muvaffaqiyatli röyxatdan digitalizing Accountning aktivlashtirilishi uchun emailingizni tasdiqlang", true);
+            return new ApiResponse("You have successfully registered. Confirm your email to activate your account", true);
         }catch (Exception ignored) {
-            return new ApiResponse(" röyxatdan ötmdiz", false);
+            return new ApiResponse("You are not registered", false);
         }
     }
 
@@ -84,20 +84,19 @@ public class HRManagerService {
         hrManager.setEmailCode(UUID.randomUUID().toString());
         employeeRepository.save(hrManager);
         try {
-            // EMAILGA YUBORISH METHODINI CHAQIRYAPMIZ
+
             sendEMail(hrManager.getEmail(), hrManager.getEmailCode());
-            return new ApiResponse("emailingizni tasdiqlang", true);
+            return new ApiResponse("confirm your email", true);
         }catch (Exception ignored) {
-            return new ApiResponse(" röyxatdan ötmdiz", false);
+            return new ApiResponse("You are not registered", false);
         }
     }
 
-
-    // SHU EMAIL GA QÖSHIB HTML NI JÖNATISH NI BAJARISH KERAK !!!
+    // NEED TO SEND HTML ATTACHED TO THIS EMAIL !!!
     public void sendEMail(String sendingEmail, String emailCode) {
 
         String link = "http://localhost:8080/api/auth/verifyEmail/hrManager?emailCode=" + emailCode + "&email=" + sendingEmail;
-        String body = "<form action=" + link + " method=\"post\">\n" +  // methoddan oldin joy tasha:  " method
+        String body = "<form action=" + link + " method=\"post\">\n" +
                 "<label>Create password for your cabinet</label>" +
                 "<br/><input type=\"text\" name=\"password\" placeholder=\"password\">\n" +
                 "<br/><button> Submit </button>\n" +
@@ -123,9 +122,9 @@ public class HRManagerService {
         hrManager.setEmailCode(null);
         hrManager.setPassword(passwordEncoder.encode(password));
         employeeRepository.save(hrManager);
-        return new ApiResponse("Account tasdiqlandi",true);
+        return new ApiResponse("Account confirmed",true);
     }
-    return new ApiResponse("Account allaqachon tasdiqlangan",false);
+    return new ApiResponse("Account already confirmed",false);
 }
 
 
@@ -136,12 +135,12 @@ public class HRManagerService {
 
         Employee hrManager = (Employee) authentication.getPrincipal();
 
-        // USERNAME NI ROLE B-N BIRGA TOKEN QILIB QAYTARAMIZ;KEYINGI SAFAR User SHU TOKEN BILAN LOGIN QILADI:
+        // RETURN USERNAME TOKEN TOGETHER WITH ROLE; THE NEXT TIME USER WILL LOGIN WITH THIS TOKEN:
         String token = jwtProvider.generateToken(loginDto.getUsername(), hrManager.getRoles());
         return new ApiResponse("Token",true,token);
 
     }catch (BadCredentialsException  badCredentialsException){
-        return new ApiResponse("Parol yoki login xato",false);
+        return new ApiResponse("login error",false);
     }}
 
 }

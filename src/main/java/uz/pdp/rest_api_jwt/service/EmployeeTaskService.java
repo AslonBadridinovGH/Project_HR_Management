@@ -48,13 +48,13 @@ public class EmployeeTaskService {
         {
             Optional<Employee> optionalEmployee = employeeRepository.findById(taskDto.getEmployeeId());
             if (!optionalEmployee.isPresent())
-            return new ApiResponse("Employee topilmadi", false);
+            return new ApiResponse("Employee not found", false);
 
             Employee employee = optionalEmployee.get();
             Set<Role> roles = employee.getRoles();
             for (Role role : roles) {
                 if (!role.getRoleName().toString().equals("EMPLOYEE")){
-                    return new ApiResponse("Boshqa Employee ID kiriting", false);
+                    return new ApiResponse("Enter a different Employee ID", false);
                 }
             }
             task.setEmployee(employee);
@@ -63,15 +63,15 @@ public class EmployeeTaskService {
             task.setStatus(AT_PROCESS);
         }
         employeeTaskRepository.save(task);
-        return new ApiResponse("Muvaffaqiyatli saqlandi",true);
+        return new ApiResponse("saved successfully",true);
     }
 
-    // "Muvaffaqiyatli özgartirildi"
+
     public ApiResponse editTask(UUID id, TaskDto taskDto){
 
         Optional<Task> optionalTask = employeeTaskRepository.findByIdAndEmployeeRolesId(id,4);
         if (!optionalTask.isPresent())
-            return new ApiResponse("Task topilmadi", false);
+            return new ApiResponse("Task not found", false);
          Task task = optionalTask.get();
         task.setTaskName(taskDto.getTaskName());
         task.setDescription(taskDto.getDescription());
@@ -104,14 +104,14 @@ public class EmployeeTaskService {
         if (taskDto.getEmployeeId()!=null) {
             Optional<Employee> optionalEmployee = employeeRepository.findById(taskDto.getEmployeeId());
             if (!optionalEmployee.isPresent())
-                return new ApiResponse("Employee topilmadi", false);
+                return new ApiResponse("Employee not found", false);
 
             Employee employee = optionalEmployee.get();
             task.setEmployee(employee);
             sendEMail(employee.getEmail());
         }
         employeeTaskRepository.save(task);
-        return new ApiResponse("Muvaffaqiyatli özgartirildi",true);
+        return new ApiResponse("Changed successfully",true);
 
     }
 
@@ -120,11 +120,11 @@ public class EmployeeTaskService {
         if (optionalTask.isPresent()){
             try {
                 employeeTaskRepository.deleteById(id);
-                return new ApiResponse("Task öchirildi", true);
+                return new ApiResponse("Task deleted", true);
             } catch (Exception e) {
-                return new ApiResponse("Task öchirilmadi", false);
+                return new ApiResponse("Task not deleted", false);
             }}
-        return new ApiResponse("Task topilmadi", false);
+        return new ApiResponse("Task not found", false);
     }
 
     public Boolean sendEMail(String sendingEmail){
@@ -145,10 +145,10 @@ public class EmployeeTaskService {
     public Boolean sendEMail1(String sendingEmail){
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setFrom("aslon.dinov@gmail.com"); // JÖNATILADIGAN EMAIL(IXTIYORIY EMAILNI YOZSA BÖLADI)
+            mailMessage.setFrom("aslon.dinov@gmail.com");
             mailMessage.setTo(sendingEmail);
             mailMessage.setSubject("TASK");
-            mailMessage.setText("Task bajarildi");
+            mailMessage.setText("task failed");
             javaMailSender.send(mailMessage);
             return true;
 
@@ -159,24 +159,3 @@ public class EmployeeTaskService {
 
 }
 
-
-/*
- public ApiResponse getTaskByEmployeeId(UUID id){
- List<Task> tasks = employeeTaskRepository.findByEmployeeId(id);
- return new ApiResponse("Tasks", true, tasks);
- }
-*/
-// task.setTaskCode(taskDto.getTaskCode());
-// task.setStatus(taskDto.getStatus());
-// task.setBerilganVaqt(taskDto.getBerilganVaqt());
-// if (task.getStatus()==3)
-/*
-        if (taskDto.getStatus().equals(DONE)) {
-            UUID createdBy = task.getCreatedBy();
-            Optional<Employee> employeeOp = employeeRepository.findById(createdBy);
-            if (employeeOp.isPresent()) {
-                Employee manager = employeeOp.get();
-                sendEMail1(manager.getEmail());
-            }
-        }
-*/

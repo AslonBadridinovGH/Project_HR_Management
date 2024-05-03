@@ -25,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
      AuthService authService;
 
 
-     // Token b-n Login qilganda, USERNI FILTERDAN ÖTKAZIB KEYIN SYSTEMAGA KIRITISH
+     // When logging in with a token, ENTER THE USER AFTER PASSING THE FILTER
      @Override
      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                            FilterChain filterChain) throws ServletException, IOException {
@@ -35,15 +35,15 @@ public class JwtFilter extends OncePerRequestFilter {
             authorization=authorization.substring(7);
             String  emailFromToken = jwtProvider.getEmailFromToken(authorization);
             if (emailFromToken!=null){
-                // DB DAN USERNAME NI TOPISH
+                // FIND USERNAME FROM DB
                 UserDetails userDetails = authService.loadUserByUsername(emailFromToken);
 
-                // userDetails DAN OLGAN OBJECT NI SYSTEMAGA AUTHENTICATE QILISH KERAK:
-                // userDetails-username, null- password; userDetails.getAuthorities() - Roles
+                // MUST AUTHENTICATE THE OBJECT FROM userDetails TO THE SYSTEM:
+                // userDetails-username, null - password; userDetails.getAuthorities() - Roles
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails,  null,  userDetails.getAuthorities());
 
-                // SYSTEMAGA USERNI KIRITISH
+                // LOGIN USER TO SYSTEM
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
          }
         }

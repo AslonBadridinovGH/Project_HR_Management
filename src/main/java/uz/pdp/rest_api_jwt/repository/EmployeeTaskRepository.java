@@ -24,8 +24,7 @@ public interface EmployeeTaskRepository extends JpaRepository<Task, UUID> {
 
 
   // List<Task> findByEmployeeIdAndStatusOrStatus(UUID employee_id, Integer status, Integer status2);
-  //  TASKNI berilgan id ga tegishli YANGILARI  jarayondagi  CHIQISHI KERAK
-  //  List<Task> findByEmployeeIdAndStatusAndStatusAndStatus
+  //  List<Task> findByEmployeeIdAndStatus
   //  (UUID employee_id, Integer status, Integer status2, Integer status3);
 
 }

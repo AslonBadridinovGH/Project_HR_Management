@@ -14,7 +14,7 @@ public class JwtProvider {
    private static final long expireTime = 1000 * 60 * 60 * 24;   // 1 KUN
    private static final String  secretSoz = "maxfiysozbunihechkimbilmasin";
 
-   // TOKENNI GENERATION QILISH
+   // GENERATE TOKEN
    public String generateToken(String username, Set<Role> roles){
       Date expireDate = new Date(System.currentTimeMillis() + expireTime);
       String token = Jwts
@@ -22,13 +22,13 @@ public class JwtProvider {
               .setSubject(username)
               .setIssuedAt(new Date())
               .setExpiration(expireDate)
-              .signWith(SignatureAlgorithm.HS512,secretSoz) // XATOLIK BERGANDA: ÖRNINI ALASHTIRDIM;SECRET SÖZNI QAYTA YOZ....
-              .claim("roles",roles)  // claim(Object nomi,objectning özi)- OBJECT BERISH UCHUN ISHLATILADI.
+              .signWith(SignatureAlgorithm.HS512,secretSoz)
+              .claim("roles", roles)  // claim(name of Object, object)
               .compact();
       return  token;
    }
 
-   // CLIENT 2-MARTA TOKEN BILAN KIRGANDA TOKEN ICHIDAN EMAIL NI OLISH
+   // RECEIVING THE EMAIL FROM THE TOKEN WHEN THE CLIENT LOGIN WITH THE TOKEN FOR THE 2ND TIME
    public String getEmailFromToken(String token){
 
         try {
@@ -39,7 +39,7 @@ public class JwtProvider {
                    .getBody()
                    .getSubject();
            return email;
-           // QANAQA XATOLIK BÖLSA HAM CATCH GA TUSHADI; MASALAN ExpiredDate bölsa ham.
+           // ANY ERROR WILL BE CACHED; For example, even though ExpiredDate divides.
         }catch (Exception e){
            return null;
         }

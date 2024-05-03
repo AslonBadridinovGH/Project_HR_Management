@@ -41,8 +41,8 @@ public class ManagerService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    // SecurityConfig Class idagi AuthenticationManager qaytaruvchi Methodni Autowired qilamiz.
-    // USER VA PASSWORDNI AVTOMATIK AUTHENTICATE QILADIGAN CLASS
+    // Autowire the Method that returns the AuthenticationManager in the SecurityConfig Class.
+    // CLASS THAT AUTOMATICALLY AUTHENTICATE USER AND PASSWORD
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -52,10 +52,9 @@ public class ManagerService {
 
     public ApiResponse registerManager(RegisterDto registerDto){
 
-      // BUNAQA EMAIL BASADA BÖLMASLIGI KERAK
         boolean existsByEmail = employeeRepository.existsByEmail(registerDto.getEmail());
         if (existsByEmail){
-            return new ApiResponse("Bunday Email Allqachon mavjud",false);
+            return new ApiResponse("This email already exists",false);
         }
 
           Employee manager=new Employee();
@@ -65,9 +64,9 @@ public class ManagerService {
         manager.setRoles(Collections.singleton(roleRepository.findByRoleName(RoleName.MANAGER)));
         manager.setEmailCode(UUID.randomUUID().toString());
         employeeRepository.save(manager);
-        // EMAILGA YUBORISH METHODINI CHAQIRYAPMIZ
+
         sendEMail(manager.getEmailCode(), manager.getEmail());
-        return new ApiResponse("Muvaffaqiyatli röyxatdan digitalizing Accountning aktivlashtirilishi uchun emailingizni tasdiqlang",true);
+        return new ApiResponse("You have successfully registered. Confirm your email to activate your account",true);
     }
 
     public void sendEMail(String emailCode, String sendingEmail){
@@ -100,9 +99,9 @@ public class ManagerService {
             manager.setEmailCode(null);
             manager.setPassword(passwordEncoder.encode(password));
             employeeRepository.save(manager);
-            return new ApiResponse("Account tasdiqlandi",true);
+            return new ApiResponse("Account confirmed",true);
         }
-        return new ApiResponse("Account allaqachon tasdiqlangan",false);
+        return new ApiResponse("Account already confirmed",false);
     }
 
     public ApiResponse loginManager(LoginDto loginDto) {
@@ -111,15 +110,16 @@ public class ManagerService {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(), loginDto.getPassword()));
 
-            // UserDetails dagi User ni beradi...
+            // Returns the User in UserDetails...
             Employee manager = (Employee) authentication.getPrincipal();
-            // USERNAME NI ROLE B-N BIRGA TOKEN QILIB QAYTARAMIZ;KEYINGI SAFAR User SHU TOKEN BILAN LOGIN QILADI:
+            // RETURN USERNAME TOKEN TOGETHER WITH ROLE; THE NEXT TIME USER WILL LOGIN WITH THIS TOKEN:
             String token = jwtProvider.generateToken(loginDto.getUsername(), manager.getRoles());
             return new ApiResponse("Token",true,token);
 
         }catch (BadCredentialsException  badCredentialsException){
-            return new ApiResponse("Parol yoki login xato",false);
+            return new ApiResponse("Password  login error",false);
         }}
+
 
 
    /*

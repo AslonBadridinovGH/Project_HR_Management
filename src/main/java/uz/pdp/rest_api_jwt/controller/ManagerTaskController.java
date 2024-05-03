@@ -26,7 +26,7 @@ public class ManagerTaskController {
 
 
 
-    // TIZIMGA KIRIB TURGAN EMPLOYEE UCHUN UNING TASK LARI .   ISHLADI
+    // TASKS FOR AN EMPLOYEE LOGGED INTO THE SYSTEM.
     @PreAuthorize(value ="hasAnyRole('MANAGER')")
     @GetMapping("/tasks")
     public HttpEntity<?>getTaskById(){
@@ -34,7 +34,7 @@ public class ManagerTaskController {
         return  ResponseEntity.ok(taskRepository.findByEmployeeIdAndStatusIn(getManagerById(),set));
     }
 
-    // TIZIM GA KIRIB TURGAN EMPLOYEE
+    // AN EMPLOYEE LOGGED INTO THE SYSTEM.
     public UUID getManagerById(){
         Employee principal = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal.getId();
@@ -44,11 +44,11 @@ public class ManagerTaskController {
     @PreAuthorize(value ="hasAnyRole('DIRECTOR')")
     @GetMapping
     public HttpEntity<?>getTask(){
-        return ResponseEntity.ok(taskRepository.findAllByEmployee_RolesId(3));   // TASKNING EMPLOYESININING ROLEID SI 3 BÖLSA
+        return ResponseEntity.ok(taskRepository.findAllByEmployee_RolesId(3));
     }
 
 
-    @PreAuthorize(value ="hasRole('DIRECTOR')")                 // TASKNING EMPLOYESININING ROLEID SI 3 BÖLSA
+    @PreAuthorize(value ="hasRole('DIRECTOR')")
     @GetMapping("/{id}")
     public HttpEntity<?>getTask(@PathVariable UUID id){
         ApiResponse apiResponse = taskService.getTaskById(id);
@@ -64,7 +64,7 @@ public class ManagerTaskController {
     }
 
 
-    @PreAuthorize(value ="hasAnyRole('DIRECTOR','MANAGER')")    // TASKNING EMPLOYESININING ROLEID SI 3 BÖLSA
+    @PreAuthorize(value ="hasAnyRole('DIRECTOR','MANAGER')")
     @PutMapping("/{id}")
     public HttpEntity<?>editTask(@PathVariable UUID id, @RequestBody TaskDto taskDto){
         ApiResponse apiResponse = taskService.editTask(id,taskDto);
@@ -72,7 +72,7 @@ public class ManagerTaskController {
     }
 
 
-    @PreAuthorize(value ="hasRole('DIRECTOR')")                // TASKNING EMPLOYESININING ROLEID SI 3 BÖLSA
+    @PreAuthorize(value ="hasRole('DIRECTOR')")
     @DeleteMapping("/{id}")
     public HttpEntity<?>deleteTask(@PathVariable UUID id){
         ApiResponse apiResponse = taskService.deleteTask(id);
@@ -84,4 +84,3 @@ public class ManagerTaskController {
 
 // return ResponseEntity.ok(employeeTaskService.getTaskByEmployeeId(getEmployeeById()));
 // return  ResponseEntity.ok(taskRepository.findByEmployeeIdAndStatus(getManagerById(),2));
-// XATOLIK BERSA AndStatus ÖRNIDA OR YOKI CONTAINS... Xatolik Bermadi

@@ -38,7 +38,7 @@ public class HRManagerController {
         return ResponseEntity.status(apiResponse.isSuccess()?200:401).body(apiResponse);
     }
 
-    // EMAILDA TASDIQLASH LINK BOSILGADA SHU METHOD ISHLAYDI VA LINK ICHIDAN email va emailCode ni ajratib oladi.
+    // VERIFY IN EMAIL THIS METHOD WORKS WHEN LINK IS CLICKED AND EXTRACTS EMAIL AND EMAIL CODE FROM THE LINK.
     @PostMapping("/verifyEmail/hrManager")
     public HttpEntity<?>hrManagerVerifyEmail(@RequestParam String emailCode, @RequestParam String email,@RequestParam String password){
         ApiResponse apiResponse=hrManagerService.HRManagerVerifyEmail(emailCode,email,password);

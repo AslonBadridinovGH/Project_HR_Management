@@ -48,7 +48,7 @@ public class EmployeeController {
     }
 
 
-    // XODIMLAR RÖYXATI KÖRINIB TURISHI KERAK.
+    // List of Employee.
     @PreAuthorize(value = "hasAnyRole('DIRECTOR','HRMANAGER')")
     @GetMapping("/getEmployees")
     public HttpEntity<?> getEmployees() {
@@ -56,19 +56,18 @@ public class EmployeeController {
     }
 
 
-    // Xodimning berilgan vaqt böyicha ishga kelib ketishi ;  ISHLADI
     @PreAuthorize(value = "hasAnyRole('DIRECTOR','HRMANAGER')")
     @GetMapping("/{id}/{date1}/{date2}")
-    public HttpEntity<?> getEmployeeById(@PathVariable UUID id, @PathVariable String date1, @PathVariable String date2) { // Yoki yana 2 ta localdate
+    public HttpEntity<?> getEmployeeById(@PathVariable UUID id, @PathVariable String date1, @PathVariable String date2) {
         ApiResponse apiResponse = employeeService.getEmployeeByIdTimeStatus(id, date1, date2);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
 
-    //  Xodimning berilgan vaqt böyicha bajargan task/i             ISHLADI
+    //  Tasks of Employee
     @PreAuthorize(value = "hasAnyRole('DIRECTOR','HRMANAGER')")
     @GetMapping("/{id}/{localDate1}/{localDate2}")
-    public HttpEntity<?> getEmployeeById1(@PathVariable UUID id, @PathVariable String localDate1, @PathVariable String localDate2) { // Yoki yana 2 ta localdate
+    public HttpEntity<?> getEmployeeById1(@PathVariable UUID id, @PathVariable String localDate1, @PathVariable String localDate2) {
         ApiResponse apiResponse = employeeService.getEmployeeByIdTimeStatus1(id, localDate1, localDate2);
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }

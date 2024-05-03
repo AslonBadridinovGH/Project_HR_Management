@@ -29,7 +29,7 @@ public class ManagerController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 401).body(apiResponse);
     }
 
-    // EMAILDA TASDIQLASH LINK BOSILGADA SHU METHOD ISHLAYDI VA LINK ICHIDAN email va emailCode ni ajratib oladi.
+    // VERIFY IN EMAIL THIS METHOD WORKS WHEN LINK IS CLICKED AND EXTRACTS EMAIL AND EMAILCODE FROM THE LINK.
     @PostMapping(value = "/verifyEmail/manager")
     public HttpEntity<?> verifyEmail(@RequestParam String emailCode, @RequestParam String email,@RequestParam String password) {
         ApiResponse apiResponse = managerService.managerVerifyEmail(emailCode, email, password);

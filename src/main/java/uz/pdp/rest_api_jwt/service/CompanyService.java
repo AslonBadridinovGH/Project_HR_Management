@@ -15,21 +15,21 @@ public class CompanyService {
 
     public ApiResponse getCompany() {
         List<Company> optionalCompany = companyRepository.findAll();
-        return new ApiResponse("Company topildi", true, optionalCompany);
+        return new ApiResponse("Company not found", true, optionalCompany);
     }
 
     public ApiResponse addCompany(Company company){
         companyRepository.save(company);
-        return new ApiResponse("Muvaffaqiyatli saqlandi",true);
+        return new ApiResponse("successfully saved",true);
     }
 
     public ApiResponse editCompany(UUID id, Company company) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if (optionalCompany.isPresent()) {
             companyRepository.save(company);
-        return new ApiResponse("Company özgartirildi", true);
+        return new ApiResponse("Company changed", true);
         }
-        return new ApiResponse("Company özgartirilmadi", false);
+        return new ApiResponse("Company not changed", false);
     }
 
     public ApiResponse deleteCompany(UUID id) {
@@ -37,19 +37,19 @@ public class CompanyService {
         if (optionalCompany.isPresent()){
             try {
                 companyRepository.deleteById(id);
-                return new ApiResponse("Company öchirildi", true);
-            } catch (Exception e) {   // Foreign Key bölsa
-                return new ApiResponse("Company öchirilmadi", false);
+                return new ApiResponse("Company removed", true);
+            } catch (Exception e) {   // Foreign Key
+                return new ApiResponse("Company not removed", false);
             }
         }
-        return new ApiResponse("Company topilmadi", false);
+        return new ApiResponse("Company not found", false);
     }
 
 
         public ApiResponse getCompanyById(UUID id) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         return optionalCompany.map(company -> new ApiResponse("Company ",true, company)
-        ).orElseGet(() -> new ApiResponse("Company topilmadi", false, null));
+        ).orElseGet(() -> new ApiResponse("Company not found", false, null));
      }
 
 

@@ -69,10 +69,10 @@ public class EmployeeService {
     public ApiResponse registerEmployee(RegisterDto registerDto) {
 
 
-        // BUNAQA EMAIL BASADA BÖLMASLIGI KERAK
+        // THIS EMAIL SHOULD NOT BE in DB
         boolean existsByEmail = employeeRepository.existsByEmail(registerDto.getEmail());
         if (existsByEmail) {
-            return new ApiResponse("Bunday Email Allqachon mavjud", false);
+            return new ApiResponse("This email already exists", false);
         }
 
         Employee employee = new Employee();
@@ -83,7 +83,7 @@ public class EmployeeService {
         employee.setEmailCode(UUID.randomUUID().toString());
         employeeRepository.save(employee);
         sendEMail(employee.getEmailCode(), employee.getEmail());
-        return new ApiResponse("Muvaffaqiyatli röyxatdan digitalizing Accountning aktivlashtirilishi uchun emailingizni tasdiqlang", true);
+        return new ApiResponse("You have successfully registered. Confirm your email to activate your account", true);
     }
 
     public ApiResponse employeeVerifyEmail(String emailCode, String email, String password) {
@@ -96,9 +96,9 @@ public class EmployeeService {
             employee.setEmailCode(null);
             employee.setPassword(passwordEncoder.encode(password));
             employeeRepository.save(employee);
-            return new ApiResponse("Account tasdiqlandi", true);
+            return new ApiResponse("Account verified", true);
         }
-        return new ApiResponse("Account allaqachon tasdiqlangan", false);
+        return new ApiResponse("Account already verified", false);
     }
 
     public ApiResponse loginEmployee(LoginDto loginDto) {
@@ -107,14 +107,14 @@ public class EmployeeService {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(), loginDto.getPassword()));
 
-            // UserDetails dagi User ni beradi...
+            // Returns the User in UserDetails...
             Employee employee = (Employee) authentication.getPrincipal();
-            // USERNAME NI ROLE B-N BIRGA TOKEN QILIB QAYTARAMIZ;KEYINGI SAFAR User SHU TOKEN BILAN LOGIN QILADI:
+           // RETURN USERNAME TOKEN TOGETHER WITH ROLE; THE NEXT TIME USER WILL LOG IN WITH THIS TOKEN:
             String token = jwtProvider.generateToken(loginDto.getUsername(), employee.getRoles());
             return new ApiResponse("Token", true, token);
 
         } catch (BadCredentialsException badCredentialsException) {
-            return new ApiResponse("Parol yoki login xato", false);
+            return new ApiResponse("Password or login error", false);
         }
     }
 
@@ -138,12 +138,11 @@ public class EmployeeService {
         }
     }
 
-    // ISHLADI
     public ApiResponse getEmployeeByIdTimeStatus(UUID uuid, String date1, String date2) {
 
         Optional<Employee> optionalEmployee = employeeRepository.findById(uuid);
         if (!optionalEmployee.isPresent()) {
-            return new ApiResponse("Bunday Employee mavjud emas", false);
+            return new ApiResponse("No such Employee exists", false);
         }
 
         Date dateA;
@@ -171,7 +170,7 @@ public class EmployeeService {
     public ApiResponse getEmployeeByIdTimeStatus1(UUID uuid, String date1, String date2) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(uuid);
         if (!optionalEmployee.isPresent()) {
-            return new ApiResponse("Bunday Employee mavjud emas", false);
+            return new ApiResponse("No such Employee exists", false);
         }
 
         try {
@@ -187,32 +186,3 @@ public class EmployeeService {
     }
 
 }
-
-
-/*       Set<Task> tasks = employee.getTask();
-         Optional<TourniquetCard> tourniquetCardByEmployeeId = tourniquetCardRepository.findByEmployeeId(uuid);
-         if (!tourniquetCardByEmployeeId.isPresent()){
-             return new ApiResponse("Bunday tourniquetCard mavjud emas", false);
-         }
-        TourniquetCard tourniquetCard = tourniquetCardByEmployeeId.get();
-        UUID id = tourniquetCard.getId();
-        Optional<TourniquetHistory> byCardId = tourniquetHistoryRepository.findByCardId(id);
-        return new ApiResponse("Task topildi", true, tasks, Collections.singletonList(byCardId));
-
-
-
-         // ISHLAMIYAPTI CHUNKI 3 - EMPLOYEE(MANAGER) DA MUAMMO BOR
-
-        public ApiResponse getEmployees() {
-        List<Employee> all = employeeRepository.findAll();
-        return new ApiResponse(Collections.singletonList(all),true,"");
-      }
-*/
-/*      LocalDate ld=LocalDate.parse(date1, DateTimeFormatter.ofPattern("dd.MM.yyy hh.mm.ss "));  // SHU YERDA XATO
-        LocalDate ld1=LocalDate.parse(date2, DateTimeFormatter.ofPattern("dd.MM.yyy hh.mm.ss "));
-        List<Task> taskList = employeeTaskRepository.findAllByCompletedAtBetweenAndEmployeeIdAndStatus(ld, ld1, uuid, 3);
-        Timestamp timestamp1=Timestamp.valueOf(date1);
-        Timestamp timestamp2=Timestamp.valueOf(date2);
-*/
-
-

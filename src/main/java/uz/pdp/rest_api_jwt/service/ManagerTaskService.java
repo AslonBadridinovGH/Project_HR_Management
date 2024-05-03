@@ -42,17 +42,17 @@ public class ManagerTaskService {
         task.setDeadLine(taskDto.getDeadLine());
         task.setStatus(NEW);
 
-         // MANAGER GA VAZIFA BIRIKTILYAPTI
+       // ASSIGNS TASK TO MANAGER
         if (taskDto.getEmployeeId() != null)
          {
            Optional<Employee> optionalManager = employeeRepository.findById(taskDto.getEmployeeId());
            if (!optionalManager.isPresent())
-           return new ApiResponse("Manager topilmadi", false);
+           return new ApiResponse("Manager not found ", false);
 
              Employee manager = optionalManager.get();
              for (Role role : manager.getRoles()) {
                 if (!role.getRoleName().toString().equals("MANAGER")){
-                return new ApiResponse("Boshqa id tanlang", false);
+                return new ApiResponse("Please choose another id ", false);
                 }
            }
              task.setEmployee(manager);
@@ -65,14 +65,14 @@ public class ManagerTaskService {
 */
         }
         managerTaskRepository.save(task);
-        return new ApiResponse("Muvaffaqiyatli saqlandi",true);
+        return new ApiResponse("Saved successfully",true);
     }
 
     public ApiResponse editTask(UUID id, TaskDto taskDto) {
 
         Optional<Task> optionalTask = managerTaskRepository.findByIdAndEmployeeRolesId(id,3);
         if (!optionalTask.isPresent())
-            return new ApiResponse("Task topilmadi", false);
+            return new ApiResponse("Task not found", false);
 
            Task task = optionalTask.get();
         task.setTaskName(taskDto.getTaskName());
@@ -105,25 +105,25 @@ public class ManagerTaskService {
         if (taskDto.getEmployeeId()!=null) {
             Optional<Employee> optionalEmployee = employeeRepository.findById(taskDto.getEmployeeId());
             if (!optionalEmployee.isPresent())
-                return new ApiResponse("Manager topilmadi", false);
+                return new ApiResponse("Manager not found", false);
 
-            // MANAGER GA VAZIFA BIRIKTILDI
+            // TASK ATTACHED TO MANAGER
              Employee employee = optionalEmployee.get();
             task.setEmployee(employee);
             sendEMail(employee.getEmail());
         }
 
         managerTaskRepository.save(task);
-        return new ApiResponse("Muvaffaqiyatli özgartirildi",true);
+        return new ApiResponse("Changed successfully",true);
     }
 
     public ApiResponse getTaskById(UUID id) {
         Optional<Task> optionalTask = managerTaskRepository.findByIdAndEmployeeRolesId(id,3);
         if (!optionalTask.isPresent()){
-           return new ApiResponse("Task topilmadi",false);
+           return new ApiResponse("Task not found",false);
         }
     return new ApiResponse("Task",true, optionalTask.get());
-    // return optionalTask.map(task -> new ApiResponse("Task topildi", true, task)).orElseGet(() -> new ApiResponse("Task topilmadi", false));
+    // return optionalTask.map(task -> new ApiResponse("Task found", true, task)).orElseGet(() -> new ApiResponse("Task not found", false));
     }
 
     public ApiResponse deleteTask(UUID id) {
@@ -132,11 +132,11 @@ public class ManagerTaskService {
         if (optionalTask.isPresent()){
             try {
                 managerTaskRepository.deleteById(id);
-                return new ApiResponse("Task öchirildi", true);
+                return new ApiResponse("Task deleted", true);
             } catch (Exception e) {
-                return new ApiResponse("Task öchirilmadi", false);
+                return new ApiResponse("Task not deleted", false);
             }}
-        return new ApiResponse("Task topilmadi", false);
+        return new ApiResponse("Task not found", false);
     }
 
     public Boolean sendEMail(String sendingEmail){
@@ -145,7 +145,7 @@ public class ManagerTaskService {
             mailMessage.setFrom("aslon.dinov@gmail.com");
             mailMessage.setTo(sendingEmail);
             mailMessage.setSubject("NEW TASK");
-            mailMessage.setText("Sizga yangi Task berildi");
+            mailMessage.setText("you have new Task");
             javaMailSender.send(mailMessage);
             return true;
 
@@ -157,10 +157,10 @@ public class ManagerTaskService {
     public Boolean sendEMail1(String sendingEmail){
         try {
              SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setFrom("aslon.dinov@gmail.com"); // JÖNATILADIGAN EMAIL(IXTIYORIY EMAILNI YOZSA BÖLADI)
+            mailMessage.setFrom("aslon.dinov@gmail.com");
             mailMessage.setTo(sendingEmail);
             mailMessage.setSubject("TASK");
-            mailMessage.setText("Task bajarildi");
+            mailMessage.setText("Task done");
             javaMailSender.send(mailMessage);
             return true;
 
@@ -169,42 +169,4 @@ public class ManagerTaskService {
         }
     }
 
-
 }
-
-
-
-// task.setStatus(taskDto.getStatus());
- /*     // task.setTaskCode(taskDto.getTaskCode());
-          if (taskDto.getIsDone()){
-            UUID createdBy = task.getCreatedBy();
-            Optional<Employee> managerOp = employeeRepository.findById(createdBy);
-            if (managerOp.isPresent()){
-                Employee manager = managerOp.get();
-                sendEMail1(manager.getEmail());
-            }
-            if (Period.between(LocalDate.now(),task.getDeadLine()).getDays()>=0){
-           //  task.setStatus("Öz vaqtida bajarildi");
-            }else {
-            //     task.setStatus("Öz vaqtida bajarilmadi");
-            };
-        }*/
- /*  public void sendEmail(String sendingEmail, Integer emailCode){
-
-        String link = "http://localhost:8080/api/auth/verify?emailCode=" + emailCode + "&email=" + sendingEmail;
-        String body = "<form action=" + link + " method=\"post\">\n" +
-                "<label>Create password for your cabinet</label>" +
-                "<br/><input type=\"text\" name=\"password\" placeholder=\"password\">\n" +
-                "<br/>  <button>Submit</button>\n" +
-                "</form>";
-
-        try {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("Teat@gmail.com");
-            simpleMailMessage.setTo(sendingEmail);
-            simpleMailMessage.setText(body);
-            javaMailSender.send(simpleMailMessage);
-        }catch (Exception ignore){
-
-        }
-    }*/

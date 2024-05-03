@@ -45,7 +45,7 @@ public class DirectorService {
 
         boolean existsByEmail = employeeRepository.existsByEmail(registerDto.getEmail());
         if (existsByEmail){
-            return new ApiResponse("Bunday Email Allqachon mavjud",false);
+            return new ApiResponse("such Email already exist",false);
         }
 
           Employee director=new Employee();
@@ -58,26 +58,26 @@ public class DirectorService {
         director.setEmailCode(UUID.randomUUID().toString());
         employeeRepository.save(director);
 
-        // EMAILGA YUBORISH METHODINI CHAQIRYAPMIZ
+        // WE CALL THE SEND TO EMAIL METHOD
         sendEMail(director.getEmailCode(),director.getEmail());
-        return new ApiResponse("Muvaffaqiyatli röyxatdan ötdingiz,Accountning aktivlashtirilishi uchun emailingizni tasdiqlang",true);
+        return new ApiResponse("You have successfully registered, confirm your email to activate the account",true);
     }
 
-    // SimpleMailMessage Classi orqali Userning Emailiga tasdialash Linkini jönatamiz
+    // We send a confirmation link to the user's email through the SimpleMailMessage class
     public void sendEMail(String emailCode, String sendingEmail){
       try {
      SimpleMailMessage mailMessage = new SimpleMailMessage();
-    mailMessage.setFrom("test@gmail.com"); // JÖNATILADIGAN EMAIL(IXTIYORIY EMAILNI YOZSA BÖLADI)
+    mailMessage.setFrom("test@gmail.com");
     mailMessage.setTo(sendingEmail);
-    mailMessage.setSubject("Accountni tasdiqlash");
-    mailMessage.setText("<a href='http://localhost:8080/api/auth/verifyEmail/director?emailCode="+emailCode+"&email="+sendingEmail+"'>Tasdiqlang</a>");
+    mailMessage.setSubject("Account verification");
+    mailMessage.setText("<a href='http://localhost:8080/api/auth/verifyEmail/director?emailCode="+emailCode+"&email="+sendingEmail+"'>Verification</a>");
     javaMailSender.send(mailMessage);
     }catch (Exception ignored){
 
    }
 }
 
-    // User ÖZ EMAILINI OCHIB, TASDIQLASH LINKINI BOSGANDA SHU METHOD ISHLAYDI.Bunda LINK ICHIDAN email va emailCode ni ajratib oladi.
+    // THIS METHOD WORKS WHEN THE USER OPENS HIS EMAIL AND CLICKS ON THE CONFIRMATION LINK. It extracts the email and emailCode from the LINK.
     public ApiResponse directorVerifyEmail(String emailCode,String email){
 
         Optional<Employee> optionalUser = employeeRepository.findByEmailCodeAndEmail(emailCode,email);
@@ -86,12 +86,12 @@ public class DirectorService {
                director.setEnabled(true);
                director.setEmailCode(null);
                employeeRepository.save(director);
-               return new ApiResponse("Account tasdiqlandi",true);
+               return new ApiResponse("Account verified",true);
            }
-               return new ApiResponse("Account allaqachon tasdiqlangan",false);
+               return new ApiResponse("Account already verified",false);
     }
 
-    // BU METHOD USERNAME VA PASSWORD NI DB B-N SOLISHTIRADI VA USER ENTITYDAGI 4 BOOLEN FIELD/GA NISBATAN FALSE EMASLIGINI TEKSHIRADI.
+    // THIS METHOD COMPARES THE USERNAME AND PASSWORD IN THE DB AND CHECKS THAT THEY ARE NOT FALSE AGAINST THE 4 BOOLEAN FIELDS IN THE USER ENTITY.
     public ApiResponse loginDirector(LoginDto loginDto) {
     try {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -99,12 +99,12 @@ public class DirectorService {
 
         Employee director = (Employee) authentication.getPrincipal();
 
-        // USERNAME NI ROLE B-N BIRGA TOKEN QILIB QAYTARAMIZ; KEYINGI SAFAR User SHU TOKEN BILAN LOGIN QILADI:
+        // RETURN USERNAME TOKEN WITH ROLE; THE NEXT TIME THE USER LOGINS WITH THIS TOKEN:
         String token = jwtProvider.generateToken(loginDto.getUsername(),director.getRoles());
         return new ApiResponse("Token",true, token);
 
     }catch (BadCredentialsException  badCredentialsException){
-        return new ApiResponse("Parol yoki login xato",false);
+        return new ApiResponse("Password or login error",false);
     }
   }
 

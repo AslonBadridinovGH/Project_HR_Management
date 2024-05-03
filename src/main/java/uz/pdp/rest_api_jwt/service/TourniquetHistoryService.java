@@ -29,7 +29,7 @@ public class TourniquetHistoryService {
 
         Optional<TourniquetCard> cardRepositoryById = tourniquetCardRepository.findById(historyDto.getCardId());
         if (!cardRepositoryById.isPresent())
-            return new ApiResponse("TournCard topilmadi",false);
+            return new ApiResponse("Tourniquet not found",false);
 
          TourniquetHistory history=new TourniquetHistory();
 
@@ -50,18 +50,18 @@ public class TourniquetHistoryService {
 
         history.setCard(cardRepositoryById.get());
         tourniquetHistoryRepository.save(history);
-        return new ApiResponse("TournCard saqlandi",true);
+        return new ApiResponse("Tourniquet not saved",true);
     }
 
     public ApiResponse editTourniquetHistory(UUID id, TourniquetHistoryDto historyDto) {
 
         Optional<TourniquetHistory> optionalTurnKet = tourniquetHistoryRepository.findById(id);
         if (!optionalTurnKet.isPresent()) {
-        return new ApiResponse("tourniquetHistory topilmadi", false);}
+        return new ApiResponse("tourniquetHistory not found", false);}
 
          Optional<TourniquetCard> cardRepositoryById = tourniquetCardRepository.findById(historyDto.getCardId());
         if (!cardRepositoryById.isPresent())
-            return new ApiResponse("TournCard topilmadi",false);
+            return new ApiResponse("tourniquetHistory not found",false);
 
          TourniquetHistory history = optionalTurnKet.get();
 
@@ -81,12 +81,12 @@ public class TourniquetHistoryService {
 
         history.setCard(cardRepositoryById.get());
         tourniquetHistoryRepository.save(history);
-        return new ApiResponse("Muvaffaqiyatli özgartirildi", true);
+        return new ApiResponse("successfully changed", true);
    }
 
     public ApiResponse getTourniquetHistory(UUID id) {
         Optional<TourniquetHistory> optionalTurnKet = tourniquetHistoryRepository.findById(id);
-        return optionalTurnKet.map(tourniquetHistory -> new ApiResponse("History topildi", true, tourniquetHistory)).orElseGet(() -> new ApiResponse("History topilmadi", false));
+        return optionalTurnKet.map(tourniquetHistory -> new ApiResponse("History found", true, tourniquetHistory)).orElseGet(() -> new ApiResponse("History not found", false));
     }
 
     public ApiResponse deleteTourniquetHistory(UUID id) {
@@ -95,11 +95,11 @@ public class TourniquetHistoryService {
         if (optionalTurnKet.isPresent())
             try {
                 tourniquetHistoryRepository.deleteById(id);
-                return new ApiResponse("TourniquetHistory öchirildi", true);
+                return new ApiResponse("TourniquetHistory deleted", true);
             } catch (Exception e) {
-                return new ApiResponse("TourniquetHistory öchirilmadi", false);
+                return new ApiResponse("TourniquetHistory not deleted", false);
             }
-        return new ApiResponse("TourniquetHistory topilmadi", false);
+        return new ApiResponse("TourniquetHistory not found", false);
     }
 
     public ApiResponse getTourniquetHistories() {

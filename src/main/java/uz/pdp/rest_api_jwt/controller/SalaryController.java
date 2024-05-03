@@ -45,7 +45,6 @@ public class SalaryController {
         // return ResponseEntity.status(optionalSalary.isPresent()?200:404).body(optionalSalary.orElse(null));
     }
 
-    // ISHLADI
       @PreAuthorize(value ="hasAnyRole('DIRECTOR','HRMANAGER')")
     @GetMapping("/employeeSalary/{month}")
     public HttpEntity<?>getSalaryByMonth(@PathVariable String month){
@@ -70,7 +69,6 @@ public class SalaryController {
         ApiResponse apiResponse = salaryService.editSalary(id,salaryDto);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
-
 
     @PreAuthorize(value ="hasRole('DIRECTOR')")
     @DeleteMapping("/{id}")

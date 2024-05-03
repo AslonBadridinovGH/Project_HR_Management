@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface TourniquetHistoryRepository extends JpaRepository<TourniquetHistory, UUID> {
 
 
-    // BERILGAN VAQT ORALIGIDA ISHGA KELIB KETISHI
+    // ARRIVAL TO WORK WITHIN THE TIME PERIOD GIVEN
 
     List<TourniquetHistory> findAllByCard_EmployeeIdAndGetOutTimeBetween(UUID card_employee_id, Timestamp getOutTime, Timestamp getOutTime2);
 

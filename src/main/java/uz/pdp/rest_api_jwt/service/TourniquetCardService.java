@@ -37,12 +37,12 @@ public class TourniquetCardService {
 
         Optional<TourniquetCard> optionalTourniquetCard = tourniquetCardRepository.findById(id);
         if (!optionalTourniquetCard.isPresent()){
-            return new ApiResponse("TurnKet topilmadi", false);
+            return new ApiResponse("TurnKet not found", false);
         }
-        return new ApiResponse("TurnKet topildi", true, optionalTourniquetCard.get());
+        return new ApiResponse("TurnKet found", true, optionalTourniquetCard.get());
      /*
-              return optionalTourniquetCard.map ( tourniquetCard -> new ApiResponse("TurnKet topildi",   true, tourniquetCard))
-                                     .orElseGet ( ()             -> new ApiResponse("TurnKet topilmadi", false  ));
+              return optionalTourniquetCard.map ( tourniquetCard -> new ApiResponse("TurnKet found",   true, tourniquetCard))
+                                     .orElseGet ( ()             -> new ApiResponse("TurnKet not found", false  ));
      */
     }
 
@@ -53,13 +53,13 @@ public class TourniquetCardService {
 
       Optional<Company> optionalCompany = companyRepository.findById(turnKetDto.getCompanyId());
       if (!optionalCompany.isPresent())
-      return new ApiResponse("company topilmadi", false);
+      return new ApiResponse("company not found", false);
 
       turnKet.setCompany(optionalCompany.get());
       Optional<Employee> optionalEmployee = employeeRepository.findById(turnKetDto.getEmployeeId());
 
       if (!optionalEmployee.isPresent())
-      return new ApiResponse("employee topilmadi", false);
+      return new ApiResponse("employee not found", false);
       turnKet.setEmployee(optionalEmployee.get());
 
       if (Period.between(LocalDate.now(),turnKetDto.getExpireDate()).getDays() >=0)
@@ -68,22 +68,22 @@ public class TourniquetCardService {
       {turnKet.setStatus(EXPIRED);}
 
       tourniquetCardRepository.save(turnKet);
-      return new ApiResponse("Muvaffaqiyatli saqlandi",true);
+      return new ApiResponse("Successfully saved ",true);
     }
 
     public ApiResponse editTourniquetCard(UUID id, TourniquetCardDto turnKetDto) {
 
          Optional<TourniquetCard> optionalTurnKet = tourniquetCardRepository.findById(id);
         if (!optionalTurnKet.isPresent()) {
-            return new ApiResponse("turniket topilmadi", false); }
+            return new ApiResponse("tourniquet not found", false); }
 
          Optional<Company> optionalCompany = companyRepository.findById(turnKetDto.getCompanyId());
         if (!optionalCompany.isPresent())
-            return new ApiResponse("company topilmadi", false);
+            return new ApiResponse("company not found", false);
 
          Optional<Employee> optionalEmployee = employeeRepository.findById(turnKetDto.getEmployeeId());
         if (!optionalEmployee.isPresent())
-            return new ApiResponse("employee topilmadi", false);
+            return new ApiResponse("employee not found", false);
 
          TourniquetCard turnKet = optionalTurnKet.get();
 
@@ -97,7 +97,7 @@ public class TourniquetCardService {
         {turnKet.setStatus(EXPIRED);}
 
         tourniquetCardRepository.save(turnKet);
-        return new ApiResponse("Muvaffaqiyatli özgartirildi", true);
+        return new ApiResponse("successfully changed", true);
     }
 
     public ApiResponse deleteTourniquetCard(UUID id) {
@@ -106,11 +106,11 @@ public class TourniquetCardService {
         if (optionalTurnKet.isPresent())
             try {
                 tourniquetCardRepository.deleteById(id);
-                return new ApiResponse("TurnKet öchirildi", true);
+                return new ApiResponse("TurnKet deleted", true);
             } catch (Exception e) {
-                return new ApiResponse("TurnKet öchirilmadi", false);
+                return new ApiResponse("TurnKet not deleted", false);
             }
-        return new ApiResponse("TurnKet topilmadi", false);
+        return new ApiResponse("TurnKet not found", false);
     }
 
     public ApiResponse getTourniquetCards() {

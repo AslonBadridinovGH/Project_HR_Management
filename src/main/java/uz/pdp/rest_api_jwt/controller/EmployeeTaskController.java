@@ -31,7 +31,7 @@ public class EmployeeTaskController {
     SecurityConfig securityConfig;
 
 
-    // TIZIMGA KIRIB TURGAN EMPLOYEE UCHUN UNING TASK LARI
+    // TASKS FOR AN EMPLOYEE LOGGED INTO THE SYSTEM
     @PreAuthorize(value ="hasAnyRole('EMPLOYEE')")
     @GetMapping("/tasks")
     public HttpEntity<?>getTaskById(){
@@ -39,14 +39,14 @@ public class EmployeeTaskController {
     return  ResponseEntity.ok(employeeTaskRepository.findByEmployeeIdAndStatusIn(getEmployeeById(),set));
     }
 
-    // TIZIM GA KIRIB TURGAN EMPLOYEE
+    // AN EMPLOYEE LOGGED INTO THE SYSTEM
     public UUID getEmployeeById(){
         Employee principal = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal.getId();
     }
 
 
-    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")     // TASKNING EMPLOYESININING ROLEID SI 4 BÖLSA
+    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")     // ROLE ID of AN EMPLOYEE LOGGED INTO THE SYSTEM  4
     @GetMapping
     public HttpEntity<?>getTasks(){
         return ResponseEntity.ok(employeeTaskRepository.findAllByEmployee_RolesId(4));
@@ -61,7 +61,7 @@ public class EmployeeTaskController {
     }
 
 
-    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")     // TASKNING EMPLOYESININING ROLEID SI 4 BÖLSA
+    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")     // IF THE ROLE ID OF THE TASK'S EMPLOYEE IS 4
     @PutMapping("/{id}")
     public HttpEntity<?>editTask(@PathVariable UUID id, @RequestBody TaskDto taskDto){
         ApiResponse apiResponse = employeeTaskService.editTask(id,taskDto);
@@ -69,7 +69,7 @@ public class EmployeeTaskController {
     }
 
 
-    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")    // TASKNING EMPLOYESININING ROLEID SI 4 BÖLSA
+    @PreAuthorize(value ="hasAnyRole('MANAGER','DIRECTOR')")    // IF THE ROLE ID OF THE TASK'S EMPLOYEE IS 4
     @DeleteMapping("/{id}")
     public HttpEntity<?>deleteTask(@PathVariable UUID id){
         ApiResponse apiResponse = employeeTaskService.deleteTask(id);
