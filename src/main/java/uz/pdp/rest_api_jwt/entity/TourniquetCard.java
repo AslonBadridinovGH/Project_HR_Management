@@ -20,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)  // KIM TOMINIDAN BAJARILGANLIGINI BILISH UCHUN
+@EntityListeners(AuditingEntityListener.class)
 public class TourniquetCard {
 
     @Id
@@ -39,10 +39,10 @@ public class TourniquetCard {
 
 
     @CreatedBy
-    private UUID    createdBy;    // KIM QÖSHGANLIGI
+    private UUID    createdBy;
 
     @LastModifiedBy
-    private UUID    updatedBy;     // KIM TAHRIRLAGANLIGI
+    private UUID    updatedBy;
 
     @CreationTimestamp
     private Timestamp createdAt;

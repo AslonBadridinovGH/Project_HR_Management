@@ -25,7 +25,6 @@ public class RegisterDto {
     @Email
     private String email;
 
-
     private String password;
 
     private Company company;

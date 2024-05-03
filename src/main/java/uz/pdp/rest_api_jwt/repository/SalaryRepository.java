@@ -10,7 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SalaryRepository extends JpaRepository<Salary, UUID> {
 
-
      List<Salary> findAllByEmployeeId(UUID employee_id);
 
      List<Salary> findAllByMonth(String month);

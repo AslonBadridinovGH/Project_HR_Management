@@ -10,13 +10,13 @@ import java.util.*;
 public interface ManagerTaskRepository extends JpaRepository<Task, UUID> {
 
 
-    // TASKNI YANGILARI, jarayondagi  CHIQISHI KERAK
+    // NEW TASKS, IN PROGRESS
     List<Task> findByEmployeeIdAndStatusIn(UUID employee_id, Set<Integer> status);
 
-    // TASKNING EMPLOYESININING ROLEID SI 3 BÖLSA
+    // if ROLE ID of TASK's EMPLOYEE is 3 .
     List<Task>findAllByEmployee_RolesId(Integer employee_roles_id);
 
-    // TASKNING EMPLOYESININING ROLE ID SI 3 BÖLGAN  VA Task NING ID SI ORQALI
+    // if ROLE ID of TASK's EMPLOYEE is 3 .  And through Task ID
     Optional<Task> findByIdAndEmployeeRolesId(UUID id, Integer employee_roles_id);
 
 }

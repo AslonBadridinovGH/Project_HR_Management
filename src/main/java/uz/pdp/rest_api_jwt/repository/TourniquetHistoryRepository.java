@@ -15,7 +15,6 @@ public interface TourniquetHistoryRepository extends JpaRepository<TourniquetHis
 
     // BERILGAN VAQT ORALIGIDA ISHGA KELIB KETISHI
 
-
     List<TourniquetHistory> findAllByCard_EmployeeIdAndGetOutTimeBetween(UUID card_employee_id, Timestamp getOutTime, Timestamp getOutTime2);
 
     List<TourniquetHistory> findAllByCard_EmployeeIdAndGetInTimeBetween(UUID card_employee_id, Timestamp getInTime, Timestamp getInTime2);

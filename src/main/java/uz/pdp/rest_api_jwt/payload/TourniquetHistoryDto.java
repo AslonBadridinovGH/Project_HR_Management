@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 public class TourniquetHistoryDto {
 
-    private  UUID       cardId;
+    private  UUID  cardId;
 
     private  String  getInTime;
 

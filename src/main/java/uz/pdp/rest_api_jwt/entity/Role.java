@@ -14,18 +14,17 @@ import javax.persistence.*;
 @Entity
 public class Role implements GrantedAuthority {
 
-    // Userlar soni chegaralanmagan, Role lar soni chegaralangan böladi shu sababli Integer qölladik
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // ENUM/NI CHAQIRAMIZ. Enum lar DB ga yozilsa, raqam bölib qoladi.shu sababli :  EnumType.STRING
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
     @Override
     public String getAuthority() {
-        return roleName.name();  //  String qaytaradi
+        return roleName.name();
     }
 
 }

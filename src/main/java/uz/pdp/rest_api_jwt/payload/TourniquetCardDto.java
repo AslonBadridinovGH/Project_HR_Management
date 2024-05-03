@@ -18,9 +18,9 @@ public class TourniquetCardDto {
     private LocalDate expireDate;
 
     @OneToOne
-    private UUID      employeeId;
+    private UUID  employeeId;
 
     @ManyToOne
-    private UUID      companyId;
+    private UUID  companyId;
 
 }

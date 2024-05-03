@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import uz.pdp.rest_api_jwt.repository.EmployeeRepository;
 
 
-// BU CLASS NING loadUserByUsername @Override b-ln METHODI UserName(UserDetails) QAYTARADI, SHU SABABLI CLASS HAM UserName QAYTARADI.
+
 @Service
 public class AuthService implements UserDetailsService {
 
     @Autowired
     EmployeeRepository employeeRepository;
 
-    // Login BÖLGANDA USERNI(TAKRORLANMAS EMAIL) DB DAN QIDIRISH
+    // if Login search USER ( EMAIL) in DB
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return employeeRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username+"topilmadi"));

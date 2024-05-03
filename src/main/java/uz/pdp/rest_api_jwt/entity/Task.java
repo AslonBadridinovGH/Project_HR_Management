@@ -18,7 +18,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-// KIM TOMINIDAN BAJARILGANLIGINI BILISH UCHUN. Token b-n login qilsa chiqadi
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
     @Id

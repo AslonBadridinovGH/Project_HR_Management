@@ -1,6 +1,6 @@
 package uz.pdp.rest_api_jwt.entity.enums;
 
-     // ROLE LARNI STATIC QILISH UCHU ULARDAN ENUM YARATIB OLDIK;
+  // MAKE ROLE STATIC
 public enum RoleName {
 
       DIRECTOR,

@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)  // KIM TOMINIDAN BAJARILGANLIGINI BILISH UCHUN,TOKEN B-N KIRSA KÖRINADI
+@EntityListeners(AuditingEntityListener.class)
 public class Company {
 
     @Id

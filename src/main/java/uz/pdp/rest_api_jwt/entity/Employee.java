@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 
     @Entity
-    @EntityListeners(AuditingEntityListener.class)  // KIM TOMINIDAN BAJARILGANLIGINI BILISH UCHUN
+    @EntityListeners(AuditingEntityListener.class)
     public class Employee implements UserDetails {
 
     @Id
@@ -32,24 +32,19 @@ import java.util.UUID;
     @Column(nullable = false)
     private String lastname;
 
-   // @Column(nullable = false, unique = true)
+    // @Column(nullable = false, unique = true)
     private String email;
 
-   // @Column(nullable = false)
+    // @Column(nullable = false)
     private String password;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-
     @OneToOne
     private Company company;
 
-
-    // OYLIK BELGILANADI
     private  Double  salary;
-
 
     @CreatedBy
     private UUID createdBy;
@@ -63,9 +58,7 @@ import java.util.UUID;
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-
         private boolean accountNonExpired=true;
-
         private boolean accountNonLocked=true;
 
         private boolean credentialsNonExpired=true;
@@ -73,8 +66,6 @@ import java.util.UUID;
         private boolean enabled;
 
         private String  emailCode;
-
-
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -105,6 +96,4 @@ import java.util.UUID;
         public boolean isEnabled() {
             return this.enabled;
         }
-
-
 }

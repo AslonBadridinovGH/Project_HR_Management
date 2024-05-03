@@ -15,7 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     boolean existsByEmail(String email);
 
-    // OPTIONAL ISHLATAMIZ CHUNKI BIZGA User TIPIDAGI OBJECT QAYTARSIN. Parametr/ni örni muhim
     Optional<Employee>findByEmailCodeAndEmail(String emailCode, String email);
 
     Optional<Employee> findByEmail(String email);

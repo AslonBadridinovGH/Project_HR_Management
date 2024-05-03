@@ -15,15 +15,12 @@ public class TaskDto {
 
     private LocalDate deadLine;
 
-    // EDIT QILGANDA YOZILADI
     private LocalDate  completedAt;
 
     private Integer    status;
 
     private  UUID      employeeId;
 
-
-    // Jönatishdan oldin true bölishi kerak
     private boolean    enabled;
 
     private  String    taskCode;

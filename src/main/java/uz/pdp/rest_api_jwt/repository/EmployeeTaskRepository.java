@@ -17,11 +17,8 @@ public interface EmployeeTaskRepository extends JpaRepository<Task, UUID> {
 
     Optional<Task> findByIdAndEmployeeRolesId(UUID id, Integer employee_roles_id);
 
-    // TASKNI YANGILARI, jarayondagi  CHIQISHI KERAK
     List<Task> findByEmployeeIdAndStatusIn(UUID employee_id, Set<Integer> status);
 
-
-    // IKKITA VAQT ORALIGIDA BAJARILGAN TASK/
     List<Task>findAllByCompletedAtBetweenAndEmployeeIdAndStatus
     (LocalDate completedAt, LocalDate completedAt2, UUID employee_id,Integer status);
 

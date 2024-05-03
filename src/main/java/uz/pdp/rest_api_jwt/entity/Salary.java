@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)   // KIM TOMINIDAN BAJARILGANLIGINI BILISH UCHUN
+@EntityListeners(AuditingEntityListener.class)
 public class Salary {
 
     @Id
@@ -28,7 +28,7 @@ public class Salary {
 
     private  String  verifyingCode;
 
-    //  qachon berildi
+
     private LocalDate  localDate;
 
     @ManyToOne
